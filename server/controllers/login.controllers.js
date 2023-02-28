@@ -11,17 +11,17 @@ const Login = {
             console.log(email, pass)
             const user = await UserModel.findOne({ where: { email } })
        
-            let compare = bcryptjs.compareSync(pass, user.password_);
+            let compare = bcryptjs.compareSync(pass, user.pass);
             let userData = {
                 id: user.id,
             }
             console.log(compare);
-            console.log(user.user_id);
+            console.log(user.id);
 
             if (compare) {
                 const token = jwt.sign({
-                    id: user.user_id,
-                    user_name: user.user_name
+                    id: user.id,
+                    user_name: user.name_
                 }, process.env.JWT_SECRET_KEY, { expiresIn: '4h' })
                 res.json({ validation: true, token, user: userData })
 
@@ -56,13 +56,18 @@ const Login = {
                 if (error) {
                     console.log(error)
                     res.json({ mensaje: false });
-                } else {                 
-                    UserModel.update({ password_: "EEEEE" }, { where: { email: authData.email } })
+                } else {         
+                    console.log("entra")
+                    console.log(authData.email)
+                    UserModel.update({ pass: passHash }, { where: { email: authData.email } })
                     .then((data) => {
                         console.log(data)
                         res.json({ mensaje: true })
                     })
                     .catch(err => {
+                        console.log("error")
+                        console.log(err)
+
                         if (err) { res.send(err) }
                     })
     

@@ -5,12 +5,12 @@ const fs = require('fs');
 
 
 const pool = new Sequelize(
-    'BugueUsers',
+    'streaminghost',
     process.env.USER,
     process.env.PASS, {
     host: process.env.HOST,
-    port: 3306,
-    dialect: 'mysql',
+    port: 3316,
+    dialect: 'mariadb',
    //dialectOptions: {  ssl: {
    //     ca: serverCa
    //  }},

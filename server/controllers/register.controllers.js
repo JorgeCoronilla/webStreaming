@@ -9,24 +9,12 @@ const Register = {
     register: async (req, res) => {
         try {
             
-            var passHash = await bcryptjs.hash(req.body.password_, 8)
+            var passHash = await bcryptjs.hash(req.body.pass, 8)
             let newUser = {
-                user_name: req.body.user_name,
+                name_: req.body.name_,
                 email: req.body.email,
-                password_: passHash,
-                user_surname: req.body.user_surname, 
-                about_me:`about_me`, 
-                year_birth: 1979, 
-                gender: `gender`, 
-                country:`country`, 
-                mother_tongue: `mother_tongue`, 
-                years_in: `years_in`, 
-                working: `working`, 
-                studies: `studies`, 
-                support_type: `support_type`,
-                expert: false, 
-                area: `area`, 
-                pic: `avatar.jpg`
+                pass: passHash,
+                role: req.body.role, 
             }
             UserModel.create(newUser)
                 .then((data) => { res.json({ mensaje: true }) })
@@ -42,10 +30,11 @@ const Register = {
             console.log(error)
         }
     },
-    signin: async (req, res) => {
+    signup: async (req, res) => {
 
         try {
             const token = jwt.sign({ email: req.body.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+            console.log(token)
             await sendemail.emailToRegister(token, req.body.email);
             res.json({ mensaje: `Email enviado a ${req.body.email}` });
 
